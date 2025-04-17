@@ -1,4 +1,4 @@
-# 🏔️ Gondor - Go n-dimensional array reimplementation
+# Gondor - Go n-dimensional array reimplementation
 
 <p align="center">
   <img src="./static/gondor_banner_3.png" alt="Bionicle Banner" width="1000"/>
