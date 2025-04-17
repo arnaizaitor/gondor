@@ -131,7 +131,22 @@ func (a *NDArray) Get(indices ...int) (float64, error) {
 
 // Set sets the value at the given indices.
 func (a *NDArray) Set(value float64, indices ...int) error {
-	// TODO: Implement index calculation and bounds checking
+
+	if len(indices) != len(a.shape) {
+		return fmt.Errorf("number of indices (%d) does not match array dimensions (%d)", len(indices), len(a.shape))
+	}
+
+	// Bounds checking and index calculation
+	offset := 0
+	for i, idx := range indices {
+		if idx < 0 || idx >= a.shape[i] {
+			return fmt.Errorf("index %d out of bounds for axis %d (size %d)", idx, i, a.shape[i])
+		}
+		offset += idx * a.strides[i]
+	}
+
+	// Set the value
+	a.data[offset] = value
 	return nil
 }
 
@@ -166,8 +181,8 @@ func Full(value float64, shape ...int) (*NDArray, error) {
 
 // Size returns the total number of elements in the array.
 func (a *NDArray) Size() int {
-	// TODO: Compute product of shape
-	return 0
+
+	return len(a.data)
 }
 
 // String provides a simple string representation.
