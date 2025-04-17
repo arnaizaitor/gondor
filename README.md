@@ -1,6 +1,8 @@
-# 🏔️ Gondor
+# 🏔️ Gondor - Go n-dimensional array reimplementation
 
-![Gondor Logo](./static/gondor_banner.png)
+<p align="center">
+  <img src="./static/gondor_banner_3.png" alt="Bionicle Banner" width="1000"/>
+</p>
 
 **Gondor** is a from-scratch reimplementation of [NumPy](https://numpy.org/) in [Go](https://go.dev/), built for learning and experimentation.
 
