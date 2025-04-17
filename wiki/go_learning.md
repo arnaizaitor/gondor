@@ -131,4 +131,90 @@ type NDArray struct {
 
 ---
 
+## 🧬 The `NDArray` Struct Explained
+
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║   STRUCT: NDArray – The Core of the Engine                                 ║
+║   ────────────────────────────────────────────────                         ║
+║   Inspired by NumPy's internals, this struct holds:                        ║
+║                                                                            ║
+║     - `data []float64` : Flat memory holding the actual values             ║
+║     - `shape []int`    : Dimensions of the array (e.g., [3, 4])            ║
+║     - `strides []int`  : Jump distances to traverse dimensions             ║
+║                                                                            ║
+║   These three together allow fast, flexible, and memory-efficient          ║
+║   indexing and reshaping of multidimensional arrays.                       ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+```
+
+### 📐 What are Strides?
+
+In a flat `data` slice, you need to know how to **translate multidimensional indices**
+into a single linear offset. That’s what `strides` are for.
+
+**Definition**:
+> `strides[i]` = how many elements to skip to move along axis `i`
+
+### 🧪 Example:
+
+For a shape `[3, 4]`, your 2D data layout is:
+
+```
+Row 0: a00 a01 a02 a03
+Row 1: a10 a11 a12 a13
+Row 2: a20 a21 a22 a23
+```
+
+This flattens to:
+
+```go
+data := []float64{
+  a00, a01, a02, a03,
+  a10, a11, a12, a13,
+  a20, a21, a22, a23,
+}
+```
+
+And the strides would be:
+
+```go
+strides := []int{4, 1}
+```
+
+So to access `a[2][3]`, compute:
+
+```go
+index := 2*4 + 3*1 = 11
+value := data[11]
+```
+
+---
+
+### ⚡ Why Use Strides?
+
+- 🔄 Efficient `reshape()` and `transpose()` without copying memory
+- 📦 Enables slices, views, and broadcasting
+- ⚙️ One array → multiple virtual representations
+
+### 💡 Access Formula (general N-D):
+
+```go
+index := 0
+for i, coord := range indices {
+    index += coord * strides[i]
+}
+return data[index]
+```
+
+---
+
+🛡️ **Design Principle**: Separate the *view* (shape + strides) from the *data* (flat memory).
+This gives you immense flexibility with zero-cost abstractions.
+
+
+---
+
 ✍️ **Tip:** Keep expanding this wiki with notes, tricks, and patterns as you develop!
