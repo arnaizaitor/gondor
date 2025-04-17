@@ -40,14 +40,30 @@ It is a learning tool for anyone who wants to:
 
 ```
 gondor/
-├── go.mod
-├── ndarray/        # Core multidimensional array logic
-│   ├── ndarray.go
-│   ├── ops.go
-├── examples/       # Usage examples
-│   └── main.go
-├── tests/          # Unit tests
-│   └── ndarray_test.go
+│   .gitignore
+│   go.mod
+│   Makefile
+│   README.md
+│
+├───cmd
+│   └───gondor
+│           main.go              # Usage examples
+│
+├───internal
+│   └───ndarray                  # Core multidimensional array logic
+│           ndarray.go
+│           ndarray_test.go
+│           ops.go
+│           shape.go
+│           utils.go
+│
+├───static
+│       gondor_banner.png
+│       gondor_banner_2.png
+│       gondor_banner_3.png
+│
+└───wiki
+        README.md                # Documentation and examples
 ```
 
 ---
