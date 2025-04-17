@@ -214,6 +214,83 @@ return data[index]
 🛡️ **Design Principle**: Separate the *view* (shape + strides) from the *data* (flat memory).
 This gives you immense flexibility with zero-cost abstractions.
 
+---
+
+## 🔧 Understanding `make` in Go
+
+`make` is a built-in Go function used to initialize **composite types**: slices, maps, and channels. Unlike `new`, which allocates memory but doesn't initialize, `make` returns a **ready-to-use value** of the correct type.
+
+---
+
+### 🔹 Syntax
+
+```go
+make(type, length[, capacity])
+```
+
+| Type       | Use `make`? | Example                         |
+|------------|-------------|---------------------------------|
+| Slice      | ✅ Yes       | `make([]int, 5)`                |
+| Map        | ✅ Yes       | `make(map[string]int)`          |
+| Channel    | ✅ Yes       | `make(chan int, 3)`             |
+| Struct     | ❌ No        | use `new(MyStruct)` or literal  |
+| Array      | ❌ No        | use `[N]T{}` or `var arr [N]T`  |
+
+---
+
+### 📌 Slices
+
+```go
+s := make([]int, 5)
+```
+
+- Creates a slice of 5 integers, all zero-initialized.
+- Length and capacity are both 5.
+
+```go
+s := make([]int, 2, 10) // len=2, cap=10
+```
+
+Allows the slice to grow efficiently up to 10 elements.
+
+---
+
+### 📌 Maps
+
+```go
+m := make(map[string]int)
+m["score"] = 100
+```
+
+- Required before writing to a map.
+- Avoids nil map panics.
+
+---
+
+### 📌 Channels
+
+```go
+ch := make(chan string, 3)
+```
+
+- Creates a buffered channel with capacity 3.
+- Can be used immediately in goroutines.
+
+---
+
+### 🧠 `make` vs `new`
+
+| Feature        | `make`                     | `new`                       |
+|----------------|----------------------------|-----------------------------|
+| Allocates?     | ✅ Yes                     | ✅ Yes                      |
+| Initializes?   | ✅ Yes (for slices, maps)  | ❌ No (just zero value)     |
+| Returns        | Value                      | Pointer                     |
+| Use with       | Slices, Maps, Channels     | Structs, Arrays             |
+
+---
+
+💡 **Pro Tip**:
+Use `make` whenever you need a working slice, map, or channel — it avoids `nil` references and is the idiomatic way in Go.
 
 ---
 

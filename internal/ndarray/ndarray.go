@@ -66,8 +66,42 @@ type NDArray struct {
 // New creates a new NDArray with the given shape.
 // All values are initialized to zero.
 func New(shape ...int) (*NDArray, error) {
-	// TODO: Implement initialization logic
-	return nil, nil
+
+	if len(shape) == 0 {
+		return nil, fmt.Errorf("shape must have at least one dimension")
+	}
+
+	if len(shape) > 32 {
+		return nil, fmt.Errorf("shape has too many dimensions (max 32)")
+	}
+
+	// Calculate the total number of elements
+	totalSize := 1
+	for _, dim := range shape {
+		if dim <= 0 {
+			return nil, fmt.Errorf("dimension size must be positive, got %d", dim)
+		}
+
+		totalSize *= dim
+	}
+
+	// Allocate the data slice
+	data := make([]float64, totalSize)
+
+	// Calculate strides (row-major order)
+	strides := make([]int, len(shape))
+	stride := 1
+	for i := len(shape) - 1; i >= 0; i-- {
+		strides[i] = stride
+		stride *= shape[i]
+	}
+
+	// Return the constructed NDArray
+	return &NDArray{
+		data:    data,
+		shape:   shape,
+		strides: strides,
+	}, nil
 }
 
 // Get returns the value at the given indices.
