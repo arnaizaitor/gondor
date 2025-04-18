@@ -1,7 +1,7 @@
 # Gondor - Scientific Computing Structures in Go
 
 ![Tests](https://github.com/arnaizaitor/gondor/actions/workflows/test.yml/badge.svg)
-[![codecov](https://codecov.io/gh/arnaizaitor/gondor/branch/master/graph/badge.svg)](https://codecov.io/gh/aitoringenieria/gondor)
+[![codecov](https://codecov.io/gh/arnaizaitor/gondor/branch/master/graph/badge.svg)](https://codecov.io/gh/arnaizaitor/gondor)
 
 
 <p align="center">
