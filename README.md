@@ -3,6 +3,7 @@
 [![codecov](https://codecov.io/gh/arnaizaitor/gondor/branch/master/graph/badge.svg)](https://codecov.io/gh/arnaizaitor/gondor)
 ![Tests](https://github.com/arnaizaitor/gondor/actions/workflows/test.yml/badge.svg)
 ![Lint](https://github.com/arnaizaitor/gondor/actions/workflows/lint.yml/badge.svg)
+![CodeQL](https://github.com/arnaizaitor/gondor/actions/workflows/codeql.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arnaizaitor/gondor)](https://goreportcard.com/report/github.com/arnaizaitor/gondor)
 ![Go Version](https://img.shields.io/badge/Go-1.24.2-blue.svg)
 
