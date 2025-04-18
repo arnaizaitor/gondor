@@ -22,6 +22,9 @@ coverage:
 	go tool cover -html=coverage.out -o coverage.html
 	@echo "📄 Ver coverage en coverage.html"
 
+clean-coverage:
+	rm -f coverage.out coverage.html coverage
+
 ## Formatea el código
 fmt:
 	go fmt ./...
