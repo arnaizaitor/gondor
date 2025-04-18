@@ -10,7 +10,7 @@ build:
 
 ## Ejecuta el proyecto principal (desde ./main.go o /cmd)
 run:
-	go run main.go
+	go run ./cmd/main.go
 
 ## Ejecuta todos los tests
 test:
