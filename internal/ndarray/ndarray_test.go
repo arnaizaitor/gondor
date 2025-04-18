@@ -40,7 +40,9 @@ func TestGetValid(t *testing.T) {
 	}
 
 	// manually set value using known index logic
-	a.Set(42.0, 1, 1)
+	if err := a.Set(42.0, 1, 1); err != nil {
+		t.Fatalf("Set failed: %v", err)
+	}
 	val, err := a.Get(1, 1)
 	if err != nil {
 		t.Fatalf("unexpected error on Get: %v", err)
