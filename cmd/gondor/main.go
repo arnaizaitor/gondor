@@ -17,3 +17,9 @@
 // ╚════════════════════════════════════════════════════════════════════════════════════╝
 
 package main
+
+import "os"
+
+func main() {
+	os.Open("/tmp/myfile") // CodeQL puede alertar por falta de control de error
+}
