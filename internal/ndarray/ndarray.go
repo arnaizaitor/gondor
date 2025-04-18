@@ -63,8 +63,27 @@ type NDArray struct {
 	strides []int
 }
 
-// New creates a new NDArray with the given shape.
-// All values are initialized to zero.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: New – Create a new NDArray                                                 ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Initializes an NDArray with the given shape, zero-filled by default.             ║
+// ║                                                                                    ║
+// ║   - Validates the shape dimensions                                                 ║
+// ║   - Computes total size and allocates flat data slice                              ║
+// ║   - Computes strides in row-major order                                            ║
+// ║                                                                                    ║
+// ║   Returns: (*NDArray, error)                                                       ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║                                                                                    ║
+// ║   a, err := New(3, 4)                                                              ║
+// ║   Shape:   [3, 4]                                                                  ║
+// ║   Strides: [4, 1]                                                                  ║
+// ║   Data:    [0.0, 0.0, ..., 0.0] (length 12)                                        ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func New(shape ...int) (*NDArray, error) {
 
 	if len(shape) == 0 {
@@ -104,7 +123,26 @@ func New(shape ...int) (*NDArray, error) {
 	}, nil
 }
 
-// Get returns the value at the given indices.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Get – Read a value from the NDArray                                        ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Retrieves a value from a specific multidimensional index.                        ║
+// ║                                                                                    ║
+// ║   - Validates number of indices                                                    ║
+// ║   - Bounds check for each axis                                                     ║
+// ║   - Computes flat index and returns data[offset]                                   ║
+// ║                                                                                    ║
+// ║   Returns: (float64, error)                                                        ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║                                                                                    ║
+// ║   val, _ := a.Get(2, 3) → reads a[2][3]                                            ║
+// ║   offset = 2*4 + 3*1 = 11                                                          ║
+// ║   returns data[11]                                                                 ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func (a *NDArray) Get(indices ...int) (float64, error) {
 
 	if len(indices) != len(a.shape) {
@@ -129,7 +167,26 @@ func (a *NDArray) Get(indices ...int) (float64, error) {
 	return a.data[flatIndex], nil
 }
 
-// Set sets the value at the given indices.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Set – Write a value into the NDArray                                       ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Writes a value at a specific multidimensional index.                             ║
+// ║                                                                                    ║
+// ║   - Checks dimensionality and bounds                                               ║
+// ║   - Computes flat index using strides                                              ║
+// ║   - Updates the data[offset] with the given value                                  ║
+// ║                                                                                    ║
+// ║   Returns: error (if index out of bounds)                                          ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║                                                                                    ║
+// ║   a.Set(42.0, 1, 2) → sets element a[1][2]                                         ║
+// ║   offset = 1*4 + 2*1 = 6                                                           ║
+// ║   data[6] = 42.0                                                                   ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func (a *NDArray) Set(value float64, indices ...int) error {
 
 	if len(indices) != len(a.shape) {
@@ -150,42 +207,151 @@ func (a *NDArray) Set(value float64, indices ...int) error {
 	return nil
 }
 
-// Shape returns the shape of the array.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Shape – Return the array dimensions                                        ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Returns the internal shape of the array.                                         ║
+// ║                                                                                    ║
+// ║   - Shape is returned as []int                                                     ║
+// ║   - Caller should treat it as read-only                                            ║
+// ║                                                                                    ║
+// ║   Returns: []int                                                                   ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║                                                                                    ║
+// ║   a.Shape() → [3, 4]                                                               ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func (a *NDArray) Shape() []int {
 	return a.shape
 }
 
-// Reshape reshapes the array to the new shape.
-// It must contain the same number of elements.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Reshape – Change the shape of the array                                    ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Alters the shape of the NDArray without changing the underlying data.            ║
+// ║                                                                                    ║
+// ║   - Validates that new shape has the same total size                               ║
+// ║   - Recomputes `strides` for the new shape                                         ║
+// ║   - No memory is reallocated                                                       ║
+// ║                                                                                    ║
+// ║   Returns: error                                                                   ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║   a.Shape() → [2, 6]                                                               ║
+// ║   a.Reshape(3, 4)                                                                  ║
+// ║   a.Shape() → [3, 4]                                                               ║
+// ║   Total elements remain: 12                                                        ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func (a *NDArray) Reshape(newShape ...int) error {
 	// TODO: Implement reshape logic
 	return nil
 }
 
-// Zeros returns a new NDArray of zeros with the given shape.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Zeros – Create an array filled with 0.0                                    ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Constructs a new NDArray with the specified shape and zero-filled data.          ║
+// ║                                                                                    ║
+// ║   - Internally calls `New(shape...)`                                               ║
+// ║   - Convenience helper                                                             ║
+// ║                                                                                    ║
+// ║   Returns: (*NDArray, error)                                                       ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║   a, _ := Zeros(2, 2)                                                              ║
+// ║   a.data → [0.0, 0.0, 0.0, 0.0]                                                    ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func Zeros(shape ...int) (*NDArray, error) {
 	return New(shape...)
 }
 
-// Ones returns a new NDArray filled with 1.0 with the given shape.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Ones – Create an array filled with 1.0                                     ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Constructs a new NDArray of the given shape, filled with ones.                   ║
+// ║                                                                                    ║
+// ║   - Uses `New` and fills `data` with 1.0                                           ║
+// ║                                                                                    ║
+// ║   Returns: (*NDArray, error)                                                       ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║   a, _ := Ones(2, 2)                                                               ║
+// ║   a.data → [1.0, 1.0, 1.0, 1.0]                                                    ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func Ones(shape ...int) (*NDArray, error) {
 	// TODO: Allocate and fill with 1.0
 	return nil, nil
 }
 
-// Full returns a new NDArray filled with a specified value.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Full – Create an array filled with a specific value                        ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Builds a new NDArray of a given shape and fills it with a custom value.          ║
+// ║                                                                                    ║
+// ║   - Uses `New`, then manually fills `data` with the given value                    ║
+// ║                                                                                    ║
+// ║   Returns: (*NDArray, error)                                                       ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║   a, _ := Full(7.0, 2, 2)                                                          ║
+// ║   a.data → [7.0, 7.0, 7.0, 7.0]                                                    ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func Full(value float64, shape ...int) (*NDArray, error) {
 	// TODO: Allocate and fill with given value
 	return nil, nil
 }
 
-// Size returns the total number of elements in the array.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: Size – Return total number of elements                                     ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Returns the total number of elements in the NDArray.                             ║
+// ║                                                                                    ║
+// ║   - Computes product of dimensions in `shape`                                      ║
+// ║                                                                                    ║
+// ║   Returns: int                                                                     ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║   shape = [2, 3] → size = 2 * 3 = 6                                                ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func (a *NDArray) Size() int {
 
 	return len(a.data)
 }
 
-// String provides a simple string representation.
+// ╔════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                    ║
+// ║   FUNC: String – Text representation of NDArray                                    ║
+// ║   ───────────────────────────────────────────────────────────────                  ║
+// ║   Returns a basic human-readable string of shape and data.                         ║
+// ║                                                                                    ║
+// ║   - Implements `Stringer` interface                                                ║
+// ║   - Useful for printing arrays via `fmt.Println()`                                 ║
+// ║                                                                                    ║
+// ║   Returns: string                                                                  ║
+// ║                                                                                    ║
+// ║────────────────────────────────────────────────────────────────────────────        ║
+// ║   EXAMPLE:                                                                         ║
+// ║   fmt.Println(a) → NDArray(shape=[2 2], data=[1 2 3 4])                            ║
+// ║                                                                                    ║
+// ╚════════════════════════════════════════════════════════════════════════════════════╝
 func (a *NDArray) String() string {
 	return fmt.Sprintf("NDArray(shape=%v, data=%v)", a.shape, a.data)
 }
