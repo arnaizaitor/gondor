@@ -32,4 +32,5 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           file: coverage.out
-          fail_ci_if_error: true # Solo necesario en repos privados
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
