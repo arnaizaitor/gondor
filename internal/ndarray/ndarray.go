@@ -6,7 +6,7 @@
 // ║ ██║ ╚████║██████╔╝██║  ██║██║  ██║██║  ██║██║  ██║   ██║                           ║
 // ║ ╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝                           ║
 // ║---------------------------------------------------------------                     ║
-// ║ Gondor - N-Dimensional Array Engine for Go                                         ║
+// ║ Gondor - N-Dimensional Array Engine written in Go                                  ║
 // ║ Inspired by the ancient power of NumPy, forged in the fire of Go                   ║
 // ║ Built for numerical computing, indexing precision, and low-level control.          ║
 // ║ --------------------------------------------------------------                     ║
