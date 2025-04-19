@@ -294,4 +294,89 @@ Use `make` whenever you need a working slice, map, or channel — it avoids `nil
 
 ---
 
+## 🧠 Pointers in Go: When to Use `*`, `&`, or Neither
+
+Go uses pointers to reference memory addresses, giving you low-level control without the complexity of manual memory management. Here's a simple breakdown to clarify when and why you'd use `*`, `&`, or neither.
+
+---
+
+### 🔹 `*` (Pointer declaration / dereference)
+
+#### 1. As a **type** (declare a pointer)
+```go
+var p *int // p is a pointer to an int
+```
+
+#### 2. To **dereference** (access the value)
+```go
+fmt.Println(*p) // Get the value at the memory address p
+```
+
+---
+
+### 🔹 `&` (Address-of operator)
+
+Use `&` to get the memory address of a value.
+
+```go
+x := 10
+p := &x // p points to x
+```
+
+---
+
+## 🔄 When to use each
+
+| Use Case                             | Symbol     | Example                           | Why?                                  |
+|-------------------------------------|------------|-----------------------------------|----------------------------------------|
+| You want a pointer to a value       | `&`        | `p := &x`                         | To avoid copying or to mutate original |
+| You want to dereference a pointer   | `*`        | `val := *p`                       | To access the pointed value            |
+| You want to declare a pointer var   | `*` in type| `var p *MyStruct`                | To store an address                    |
+| You want to define method receiver  | `*`        | `func (s *Struct) Do()`          | To allow mutation                      |
+| You don’t need to mutate or share   | None       | `func (s Struct) Copy()`         | Value copy is fine                     |
+
+---
+
+## 🔧 In method receivers
+
+```go
+type NDArray struct {
+    data []float64
+}
+
+func (a NDArray) Copy() NDArray {
+    return a // works on a copy
+}
+
+func (a *NDArray) Set(i int, val float64) {
+    a.data[i] = val // modifies the original
+}
+```
+
+🔸 Use a **pointer receiver** (`*NDArray`) when:
+- The method **modifies** the struct
+- You want to avoid **copying** on every call (performance)
+
+---
+
+## ⚠️ Beware!
+
+- `*` is used for **dereferencing** and also in **type declarations**
+- `&` is used to get a variable’s **memory address**
+- You usually combine both: `*p := &x`
+
+---
+
+## 🧠 Summary
+
+| Situation                        | Use |
+|----------------------------------|-----|
+| Access original (not a copy)     | `&` |
+| Store address of a value         | `*` in type |
+| Read from a pointer              | `*` before variable |
+| Write with modification intent   | pointer receiver (`*Type`) |
+| Just pass by value (copy)        | no symbol needed |
+
+---
+
 ✍️ **Tip:** Keep expanding this wiki with notes, tricks, and patterns as you develop!
